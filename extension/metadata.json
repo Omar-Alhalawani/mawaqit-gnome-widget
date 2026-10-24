@@ -3,5 +3,5 @@
   "name": "Mawaqit GNOME Widget",
   "description": "An unofficial, draggable GNOME desktop widget with live Mawaqit prayer and published iqamah times for three Ottawa mosques. Silent by design.",
   "shell-version": ["50"],
-  "version": 5
+  "version": 6
 }
