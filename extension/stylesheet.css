@@ -2,29 +2,29 @@
 .omar-mawaqit-desktop-body { color: #fff; font-family: Cantarell, sans-serif; }
 .omar-mawaqit-mark {
   background-color: rgba(255,255,255,0.97); border-radius: 22px;
-  color: #6f25bf; font-size: 24px; font-weight: 700;
-  padding-top: 5px; text-align: center;
+  color: #6f25bf; font-size: 28px; font-weight: 700;
+  padding-top: 3px; text-align: center;
 }
 .omar-mawaqit-mosque { color: #fff; font-size: 17px; font-weight: 700; }
-.omar-mawaqit-place { color: rgba(255,239,255,0.82); font-size: 12px; }
-.omar-mawaqit-count-prefix { color: rgba(255,250,255,0.86); font-size: 11px; }
-.omar-mawaqit-count { color: #fff; font-size: 27px; font-weight: 700; }
+.omar-mawaqit-place { color: rgba(255,244,255,0.87); font-size: 12px; }
+.omar-mawaqit-count-prefix { color: rgba(255,250,255,0.90); font-size: 11px; font-weight: 600; }
+.omar-mawaqit-count { color: #fff; font-size: 27px; font-weight: 800; }
 .omar-mawaqit-nav {
   background-color: transparent; color: rgba(255,241,255,0.88); border: none;
   box-shadow: none; border-radius: 0; padding: 0; font-size: 29px; font-weight: 500;
 }
 .omar-mawaqit-nav:hover { background-color: transparent; color: #fff; }
 .omar-mawaqit-pill {
-  background-color: rgba(255,244,255,0.16); border-radius: 20px;
+  background-color: rgba(255,244,255,0.13); border-radius: 20px;
   color: #fff4ff; font-size: 12px; font-weight: 500;
   padding: 4px 10px; text-align: center;
 }
 .omar-mawaqit-prayer-name { color: rgba(255,232,255,0.82); font-size: 12px; }
 .omar-mawaqit-prayer-clock { color: #fff; font-size: 22px; font-weight: 700; }
-.omar-mawaqit-prayer-iqama { color: rgba(255,240,255,0.79); font-size: 12px; }
+.omar-mawaqit-prayer-iqama { color: rgba(255,243,255,0.85); font-size: 12px; }
 .omar-mawaqit-prayer-name-active { color: #fff; font-size: 12px; font-weight: 700; }
 .omar-mawaqit-prayer-clock-active { color: #fff; font-size: 22px; font-weight: 700; }
-.omar-mawaqit-prayer-iqama-active { color: #ffe6a7; font-size: 12px; font-weight: 600; }
+.omar-mawaqit-prayer-iqama-active { color: #fff0bd; font-size: 12px; font-weight: 600; }
 .omar-mawaqit-selected-underline { background-color: #fff; border-radius: 3px; }
 .omar-mawaqit-clear-underline { background-color: transparent; }
 .omar-mawaqit-status { color: #fff0b7; font-size: 9px; }
