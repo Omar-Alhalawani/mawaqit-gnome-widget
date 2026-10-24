@@ -1,6 +1,6 @@
 # Mawaqit GNOME Widget
 
-An **unofficial GNOME Shell 50 desktop widget** for Mawaqit mosque prayer schedules on Ubuntu 26.04. It appears on your wallpaper instead of opening a GTK application. Built for a compact, unobtrusive presentation with subtle Islamic geometry, crisp native text, published iqamah times, and no audio.
+An **unofficial GNOME Shell 50 desktop widget** for Mawaqit mosque prayer schedules on Ubuntu 26.04. It appears on your wallpaper instead of opening a GTK application. Built for a compact, unobtrusive presentation with soft botanical arabesques, crisp native text, published iqamah times, and no audio.
 
 **Not affiliated with Mawaqit.** Source schedules belong to their respective mosques; verify all prayer and iqamah times against the mosque's [official Mawaqit website](https://mawaqit.net/). This widget fetches publicly displayed pages, and might need maintenance when Mawaqit's site changes.
 
@@ -10,8 +10,8 @@ An **unofficial GNOME Shell 50 desktop widget** for Mawaqit mosque prayer schedu
 - Five daily prayer times, next prayer and live countdown; says **tomorrow** for next-day Fajr
 - Actual mosque-published **iqamah calendar** (offsets such as `+5` or clock times); missing values are shown as `—`, never invented
 - Daily Isha from Mawaqit's published day schedule, accurate rollover for next-day Fajr
-- Lightweight Cairo background artwork drawn natively in GNOME Shell; patterns concentrated near edges for readability
-- Drag using the **white diamond grip**, or **Alt + left drag**; remembers mosque and position
+- Lightweight Cairo background artwork with curved botanical vines and flowing fabric highlights; no star polygons or interlocking triangles, and a clean centre for readability
+- Drag using the **white crescent grip**, or **Alt + left drag**; remembers mosque and position
 - Works with GNOME Remote Login's delayed/virtual monitor initialization
 - **Silent by design**; no audio, adhan playback, or notifications are implemented
 - Retains cached schedules for temporary network outages
