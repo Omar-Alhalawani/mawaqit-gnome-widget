@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import {extractConfData, dayData, prayerRow, formatTime, MOSQUES} from '../extension/mawaqit.js';
+const calendar = Array.from({length: 12}, () => ({}));
+const iqamaCalendar = Array.from({length: 12}, () => ({}));
+const times = ['06:08','07:30','12:47','15:37','18:04','19:26'];
+calendar[9]['23'] = times;
+calendar[9]['24'] = ['06:09','07:31','12:48','15:38','18:05','19:27'];
+iqamaCalendar[9]['23'] = ['+10','13:00','+8','+5','20:12'];
+const conf = {calendar, iqamaCalendar, times, timezone:'America/Toronto', name:'MAC'};
+const html = '<script> const confData = '+JSON.stringify(conf)+'; </script>';
+const extracted = extractConfData(html);
+const d = dayData(extracted,2026,10,23,true);
+assert.equal(d.times[4], '19:26', 'Isha must come from the actual daily schedule');
+assert.deepEqual(d.iqamah,['+10','1:00','+8','+5','8:12']);
+assert.equal(formatTime(d.times[4]), '7:26');
+assert.equal(dayData(extracted,2026,10,24,false).times[4],'19:27');
+const noIq = dayData({...conf, iqamaCalendar:undefined},2026,10,23,true);
+assert.deepEqual(noIq.iqamah,['—','—','—','—','—'],'Never fabricate iqamah');
+assert.deepEqual(prayerRow(['05:00','05:20','06:20','12:00','15:00','18:00','19:00']).times,
+  ['05:00','12:00','15:00','18:00','19:00']);
+assert.equal(MOSQUES.length,3);
+console.log('PASS: confData, published Isha, monthly data, real iqamah, unsupported iqamah, layout 7');
