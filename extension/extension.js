@@ -76,15 +76,60 @@ function roundedRectangle(cr, x, y, w, h, radius) {
   cr.arc(x + r, y + r, r, Math.PI, 3 * Math.PI / 2);
   cr.closePath();
 }
-function eightPointStar(cr, cx, cy, outer, inner, angle = 0) {
-  for (let i = 0; i < 16; i++) {
-    const theta = angle + i * Math.PI / 8 - Math.PI / 2;
-    const r = i % 2 === 0 ? outer : inner;
-    const x = cx + r * Math.cos(theta), y = cy + r * Math.sin(theta);
-    if (i === 0) cr.moveTo(x, y); else cr.lineTo(x, y);
-  }
+// Curved botanical ornamentation: leaves, scrolling stems and soft ribbons.
+// Intentionally no star polygons, interlocking triangles or occult-looking glyphs.
+function paintLeaf(cr, x, y, angle, length, width, alpha) {
+  cr.save();
+  cr.translate(x, y);
+  cr.rotate(angle);
+  cr.newSubPath();
+  cr.moveTo(0, 0);
+  cr.curveTo(length * 0.27, -width * 0.95, length * 0.78, -width * 0.66, length, 0);
+  cr.curveTo(length * 0.77, width * 0.65, length * 0.28, width * 0.84, 0, 0);
   cr.closePath();
+  cr.setSourceRGBA(1, 0.86, 1, alpha * 0.44);
+  cr.fillPreserve();
+  cr.setSourceRGBA(1, 0.93, 1, alpha);
+  cr.setLineWidth(0.85);
+  cr.stroke();
+  // Single curved leaf vein, never an angular / intersecting motif.
+  cr.moveTo(2, 0);
+  cr.curveTo(length * 0.36, -width * 0.10, length * 0.72, width * 0.09, length * 0.95, 0);
+  cr.setLineWidth(0.65);
+  cr.setSourceRGBA(1, 0.94, 1, alpha * 0.55);
+  cr.stroke();
+  cr.restore();
 }
+
+function paintVine(cr, ox, oy, side, alpha) {
+  cr.save();
+  cr.translate(ox, oy);
+  cr.scale(side, 1);
+  cr.setLineWidth(1.4);
+  cr.setSourceRGBA(1, 0.88, 1, alpha);
+  cr.moveTo(0, 0);
+  cr.curveTo(49, -31, 12, -57, 43, -88);
+  cr.curveTo(82, -126, 32, -165, 74, -211);
+  cr.stroke();
+  // Alternating scrolling leaves form a botanical arabesque, not a lattice.
+  for (const [x, y, a, len, wide] of [
+    [20, -19, -0.90, 22, 12],
+    [29, -42, -2.26, 19, 11],
+    [35, -76, -0.49, 24, 11],
+    [43, -103, -2.36, 20, 11],
+    [56, -144, -0.66, 22, 12],
+    [63, -171, -2.25, 19, 11],
+  ]) paintLeaf(cr, x, y, a, len, wide, alpha);
+  // Tiny round buds, not points or stars.
+  for (const [x, y, r] of [[45, -87, 2.7], [73, -209, 3], [15, -16, 2.2]]) {
+    cr.newSubPath();
+    cr.arc(x, y, r, 0, 2 * Math.PI);
+    cr.setSourceRGBA(1, 0.94, 1, alpha * 0.65);
+    cr.fill();
+  }
+  cr.restore();
+}
+
 function paintOrnaments(area) {
   const cr = area.get_context();
   try {
@@ -94,39 +139,45 @@ function paintOrnaments(area) {
     roundedRectangle(cr, 0.5, 0.5, w - 1, h - 1, 22);
     cr.clip();
 
-    // Violet fabric lighting: luminous corner, velvety centre, deep right edge.
+    // Velvet-violet gradient; the text in the centre remains clear.
     const ground = new Cairo.LinearGradient(0, 0, w, h);
-    ground.addColorStopRGBA(0, 0.57, 0.16, 0.92, 1);
-    ground.addColorStopRGBA(0.46, 0.47, 0.12, 0.84, 1);
-    ground.addColorStopRGBA(1, 0.36, 0.08, 0.70, 1);
-    cr.setSource(ground); cr.paint();
+    ground.addColorStopRGBA(0, 0.60, 0.17, 0.93, 1);
+    ground.addColorStopRGBA(0.5, 0.49, 0.13, 0.86, 1);
+    ground.addColorStopRGBA(1, 0.35, 0.08, 0.69, 1);
+    cr.setSource(ground);
+    cr.paint();
 
-    // Asymmetric, low-contrast geometric rosettes at the edges.
-    // No tiled star outlines underneath the prayer numbers.
-    for (const [x, y, radius, alpha] of [
-      [506, -8, 108, 0.115], [546, 140, 75, 0.085],
-      [5, 208, 96, 0.10], [-45, 80, 66, 0.055],
-    ]) {
-      cr.setLineWidth(1.25);
-      for (let ring = 0; ring < 3; ring++) {
-        const r = radius * (1 - ring * 0.22);
-        cr.setSourceRGBA(1, 0.85, 1, alpha * (1 - ring * 0.21));
-        eightPointStar(cr, x, y, r, r * 0.56, ring * Math.PI / 8);
-        cr.stroke();
-        cr.arc(x, y, r * 0.82, 0, Math.PI * 2);
-        cr.stroke();
-      }
-    }
-    // Silk-like, curved bands along the bottom edge.
-    cr.setLineWidth(24);
-    cr.setSourceRGBA(1, 0.82, 1, 0.045);
-    cr.moveTo(-35, 192);
-    cr.curveTo(120, 155, 130, 233, 290, 186);
-    cr.curveTo(408, 151, 460, 217, 575, 159);
+    // Long, translucent silk folds add texture without a repeating grid.
+    cr.moveTo(0, h * 0.72);
+    cr.curveTo(w * 0.20, h * 0.53, w * 0.37, h * 0.97, w * 0.60, h * 0.79);
+    cr.curveTo(w * 0.78, h * 0.61, w * 0.91, h * 0.94, w, h * 0.68);
+    cr.lineTo(w, h);
+    cr.lineTo(0, h);
+    cr.closePath();
+    cr.setSourceRGBA(0.95, 0.76, 1, 0.045);
+    cr.fill();
+
+    cr.setLineWidth(20);
+    cr.setSourceRGBA(0.96, 0.81, 1, 0.035);
+    cr.moveTo(-25, h - 25);
+    cr.curveTo(120, h - 95, 180, h + 12, 320, h - 38);
+    cr.curveTo(430, h - 87, 480, h + 13, w + 24, h - 47);
     cr.stroke();
-    cr.setLineWidth(1.1);
-    cr.setSourceRGBA(1, 0.9, 1, 0.11);
+
+    // Ornament stays on the edges; no sharp or intersecting star motifs.
+    paintVine(cr, w + 10, h + 9, -1, 0.105);
+    paintVine(cr, -14, h + 28, 1, 0.065);
+    // A quiet curling line at the upper-right corner.
+    cr.setLineWidth(1.05);
+    cr.setSourceRGBA(1, 0.92, 1, 0.065);
+    cr.moveTo(w - 45, -14);
+    cr.curveTo(w - 12, 21, w - 91, 34, w - 38, 71);
+    cr.stroke();
+
+    // Single soft rim, very low contrast.
     roundedRectangle(cr, 1, 1, w - 2, h - 2, 21);
+    cr.setLineWidth(1);
+    cr.setSourceRGBA(1, 0.94, 1, 0.095);
     cr.stroke();
     cr.restore();
   } finally {
@@ -223,7 +274,7 @@ export default class OmarPrayerDesktopExtension extends Extension {
       at(label(initial, css), x, y, width, height);
 
     const grip = new St.Button({
-      child: label('◈', 'omar-mawaqit-mark'),
+      child: label('☾', 'omar-mawaqit-mark'),
       can_focus: true, style: 'background: transparent; border: none; padding: 0;',
     });
     grip.connect('button-press-event', (_actor, event) => this._startDrag(event));
@@ -421,7 +472,7 @@ export default class OmarPrayerDesktopExtension extends Extension {
         nextAt = todayAt(tz, td, dayTomorrow.times[0]);
       }
       const left = Math.max(0, nextAt - nowTs);
-      this._countPrefix.set_text(`${nextName}${nextIndex < 0 ? ' tomorrow' : ''} in`);
+      this._countPrefix.set_text(nextIndex < 0 ? `${nextName} tomorrow` : `${nextName} in`);
       this._count.set_text(`${Math.floor(left / 3600)}:${padded(Math.floor(left % 3600 / 60))}:${padded(left % 60)}`);
       const sunrise = today.sunrise ? formatTime(today.sunrise) : '—';
       this._sunrise.set_text(`☀  ${sunrise}`);
